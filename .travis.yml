@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t amalesa/react-docker-starter -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true amalesa/react-docker-starter npm run test
+
+deploy:
+   provider: elasticbeanstalk
+   region: "eu-north-1"
+   app: "react-docker-starter"
+   env: "ReactDockerStarter-env"
+   bucket_name: "elasticbeanstalk-eu-north-1-119254272961"
+   bucket_path: "react-docker-starter"
+   on:
+     branch: master
+  access_key_id: 
+     secure: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
